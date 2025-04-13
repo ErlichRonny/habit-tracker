@@ -1,0 +1,25 @@
+body {
+    text-align: center;
+}
+
+h1 {
+    color: #f4a4a4;
+}
+
+button {
+    color: black;
+    display: inline-block;
+    padding: 10px 15px;
+}
+
+ol {
+    background: #ff9999;
+    padding: 20px;
+}
+
+ol li {
+    background: #ffe5e5;
+    color: darkred;
+    padding: 5px;
+    margin-left: 35px;
+}
