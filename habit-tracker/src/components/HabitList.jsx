@@ -10,19 +10,19 @@ function HabitList() {
   };
 
   return (
-    <>
-      <h1 className="text-center"> Habits </h1>
-      <ul className="max-w-xl mx-auto bg-gray-100 rounded-lg shadow-md">
+    <div className="min-h-screen flex flex-col items-center justify-start p-6 bg-gray-50">
+      <h1 className="text-2xl font-bold mb-6">Habits</h1>
+      <div className="flex flex-col items-center gap-4 w-full">
         {habits.map((habit) => (
           <HabitCard
+            key={habit.id}
             name={habit.name}
             category={habit.category}
             streak={habit.streak}
-            onHabitClick={handleHabitClick}
           />
         ))}
-      </ul>
-    </>
+      </div>
+    </div>
   );
 }
 
