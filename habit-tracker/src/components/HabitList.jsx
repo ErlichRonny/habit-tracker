@@ -5,6 +5,9 @@ function HabitList() {
     { name: "Drink water", category: "Wellness", streak: 10, id: 1 },
     { name: "Exercise", category: "Wellness", streak: 2, id: 2 },
   ];
+  const handleHabitClick = (habitName) => {
+    alert(`Habit clicked: ${habitName}`);
+  };
 
   return (
     <>
@@ -15,6 +18,7 @@ function HabitList() {
             name={habit.name}
             category={habit.category}
             streak={habit.streak}
+            onHabitClick={handleHabitClick}
           />
         ))}
       </ul>
