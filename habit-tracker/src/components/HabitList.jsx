@@ -18,9 +18,15 @@ function HabitList() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-start p-6 bg-gray-50">
       <h1 className="text-2xl font-bold mb-6">Habits</h1>
-      <button onClick={() => setShowModal(true)}> Add Habit </button>
+      <button
+        className="px-2 py-1 rounded bg-green-100 hover:bg-green-200 transition mb-2"
+        onClick={() => setShowModal(true)}
+      >
+        {" "}
+        Add Habit{" "}
+      </button>
       {showAddModal && (
-        <HabitModal onClose={()=> setShowModal(false)}>
+        <HabitModal onClose={() => setShowModal(false)}>
           <AddHabitForm />
         </HabitModal>
       )}
