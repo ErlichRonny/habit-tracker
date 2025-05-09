@@ -1,18 +1,24 @@
 import HabitCard from "./HabitCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HabitModal from "./HabitModal";
 import AddHabitForm from "./AddHabitForm";
 
 function HabitList() {
-  const [habits, setHabits] = useState([
-    { name: "Drink water", category: "Wellness", streak: 10, id: 1 },
-    { name: "Exercise", category: "Wellness", streak: 2, id: 2 },
-  ]);
+  const [habits, setHabits] = useState(() => {
+    const storedHabits = localStorage.getItem("habits");
+    return storedHabits ? JSON.parse(storedHabits) : [];
+  });
 
   const [showAddModal, setShowModal] = useState(false);
 
+  useEffect(() => {
+    localStorage.setItem("habits", JSON.stringify(habits));
+  }, [habits]);
+
   const handleDelete = (habitName) => {
-    setHabits(habits.filter((habit) => habit.name !== habitName));
+    const updatedHabits = habits.filter((habit) => habit.name !== habitName);
+    setHabits(updatedHabits);
+    localStorage.setItem("habits", JSON.stringify(updatedHabits)); // Directly update localStorage
   };
 
   const handleAddHabit = (newHabit) => {
