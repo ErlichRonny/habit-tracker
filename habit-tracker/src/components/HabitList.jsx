@@ -15,6 +15,11 @@ function HabitList() {
     setHabits(habits.filter((habit) => habit.name !== habitName));
   };
 
+  const handleAddHabit = (newHabit) => {
+    setHabits([newHabit, ...habits]);
+    setShowModal(false);
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-start p-6 bg-gray-50">
       <h1 className="text-2xl font-bold mb-6">Habits</h1>
@@ -27,7 +32,7 @@ function HabitList() {
       </button>
       {showAddModal && (
         <HabitModal onClose={() => setShowModal(false)}>
-          <AddHabitForm />
+          <AddHabitForm onAddHabit={handleAddHabit} />
         </HabitModal>
       )}
       <div className="flex flex-col items-center gap-4 w-full">
