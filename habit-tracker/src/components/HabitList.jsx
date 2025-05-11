@@ -9,26 +9,65 @@ function HabitList() {
     return storedHabits ? JSON.parse(storedHabits) : [];
   });
 
-  const [showAddModal, setShowModal] = useState(false);
+  const [categories, setCategories] = useState(() => {
+    const storedCategories = localStorage.getItem("categories");
+    return storedCategories ? JSON.parse(storedCategories) : [];
+  });
 
+  const [showAddModal, setShowModal] = useState(false);
+  const [filteredCategory, setFilteredCategory] = useState("");
+  const filteredHabits = habits.filter(
+    (habit) => filteredCategory === "" || habit.category === filteredCategory
+  );
+
+  // Runs every time the habits state changes
   useEffect(() => {
     localStorage.setItem("habits", JSON.stringify(habits));
-  }, [habits]);
+    localStorage.setItem("categories", JSON.stringify(categories));
+  }, [habits, categories]);
 
   const handleDelete = (habitName) => {
     const updatedHabits = habits.filter((habit) => habit.name !== habitName);
     setHabits(updatedHabits);
-    localStorage.setItem("habits", JSON.stringify(updatedHabits)); // Directly update localStorage
+
+    const activeCategories = [
+      ...new Set(updatedHabits.map((habit) => habit.category)),
+    ];
+    setCategories(activeCategories);
   };
 
   const handleAddHabit = (newHabit) => {
     setHabits([newHabit, ...habits]);
+    if (!categories.includes(newHabit.category)) {
+      setCategories([newHabit.category, ...categories]);
+    }
     setShowModal(false);
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start p-6 bg-gray-50">
       <h1 className="text-2xl font-bold mb-6">Habits</h1>
+      <div className="flex gap-2 mb-4">
+        <button
+          className={`px-3 py-1 rounded-full text-sm ${
+            filteredCategory === "" ? "bg-blue-200" : "bg-gray-100"
+          }`}
+          onClick={() => setFilteredCategory("")}
+        >
+          All
+        </button>
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            className={`px-3 py-1 rounded-full text-sm ${
+              filteredCategory === cat ? "bg-blue-200" : "bg-gray-100"
+            }`}
+            onClick={() => setFilteredCategory(cat)}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
       <button
         className="px-2 py-1 rounded bg-green-100 hover:bg-green-200 transition mb-2"
         onClick={() => setShowModal(true)}
@@ -38,11 +77,11 @@ function HabitList() {
       </button>
       {showAddModal && (
         <HabitModal onClose={() => setShowModal(false)}>
-          <AddHabitForm onAddHabit={handleAddHabit} />
+          <AddHabitForm onAddHabit={handleAddHabit} categories={categories} />
         </HabitModal>
       )}
       <div className="flex flex-col items-center gap-4 w-full">
-        {habits.map((habit) => (
+        {filteredHabits.map((habit) => (
           <HabitCard key={habit.id} {...habit} onDelete={handleDelete} />
         ))}
       </div>
