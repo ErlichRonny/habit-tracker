@@ -7,7 +7,18 @@ import CategoryFilter from "./CategoryFilter";
 function HabitList() {
   const [habits, setHabits] = useState(() => {
     const storedHabits = localStorage.getItem("habits");
-    return storedHabits ? JSON.parse(storedHabits) : [];
+    if (storedHabits) {
+      const parsedHabits = JSON.parse(storedHabits);
+      // Add unique IDs to habits that don't have them
+      const habitsWithIds = parsedHabits.map((habit, index) => ({
+        ...habit,
+        id: habit.id || `habit-${Date.now()}-${index}`,
+      }));
+      localStorage.setItem("habits", JSON.stringify(habitsWithIds));
+      // Return the updated habits
+      return habitsWithIds;
+    }
+    return [];
   });
 
   const [categories, setCategories] = useState(() => {
@@ -38,9 +49,14 @@ function HabitList() {
   };
 
   const handleAddHabit = (newHabit) => {
-    setHabits([newHabit, ...habits]);
-    if (!categories.includes(newHabit.category)) {
-      setCategories([newHabit.category, ...categories]);
+    const habitWithId = {
+      ...newHabit,
+      id: newHabit.id || `habit-${Date.now()}`,
+    };
+
+    setHabits([habitWithId, ...habits]);
+    if (!categories.includes(habitWithId.category)) {
+      setCategories([habitWithId.category, ...categories]);
     }
     setShowModal(false);
   };
@@ -48,7 +64,11 @@ function HabitList() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-start p-6 bg-gray-50">
       <h1 className="text-2xl font-bold mb-6">Habits</h1>
-      <CategoryFilter categories={categories} filteredCategory={filteredCategory} setFilteredCategory={setFilteredCategory} />
+      <CategoryFilter
+        categories={categories}
+        filteredCategory={filteredCategory}
+        setFilteredCategory={setFilteredCategory}
+      />
       <button
         className="px-2 py-1 rounded bg-green-100 hover:bg-green-200 transition mb-2"
         onClick={() => setShowModal(true)}
