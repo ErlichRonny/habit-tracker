@@ -1,63 +1,20 @@
 import HabitCard from "./HabitCard";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import HabitModal from "./HabitModal";
 import AddHabitForm from "./AddHabitForm";
 import CategoryFilter from "./CategoryFilter";
+import { useHabits } from "../context/HabitContext";
 
-function HabitList() {
-  const [habits, setHabits] = useState(() => {
-    const storedHabits = localStorage.getItem("habits");
-    if (storedHabits) {
-      const parsedHabits = JSON.parse(storedHabits);
-      // Add unique IDs to habits that don't have them
-      const habitsWithIds = parsedHabits.map((habit, index) => ({
-        ...habit,
-        id: habit.id || `habit-${Date.now()}-${index}`,
-      }));
-      localStorage.setItem("habits", JSON.stringify(habitsWithIds));
-      // Return the updated habits
-      return habitsWithIds;
-    }
-    return [];
-  });
-
-  const [categories, setCategories] = useState(() => {
-    const storedCategories = localStorage.getItem("categories");
-    return storedCategories ? JSON.parse(storedCategories) : [];
-  });
-
+export default function HabitList() {
+  const { habits, categories, addHabit, deleteHabit } = useHabits();
   const [showAddModal, setShowModal] = useState(false);
   const [filteredCategory, setFilteredCategory] = useState("");
   const filteredHabits = habits.filter(
     (habit) => filteredCategory === "" || habit.category === filteredCategory
   );
 
-  // Runs every time the habits state changes
-  useEffect(() => {
-    localStorage.setItem("habits", JSON.stringify(habits));
-    localStorage.setItem("categories", JSON.stringify(categories));
-  }, [habits, categories]);
-
-  const handleDelete = (habitName) => {
-    const updatedHabits = habits.filter((habit) => habit.name !== habitName);
-    setHabits(updatedHabits);
-
-    const activeCategories = [
-      ...new Set(updatedHabits.map((habit) => habit.category)),
-    ];
-    setCategories(activeCategories);
-  };
-
   const handleAddHabit = (newHabit) => {
-    const habitWithId = {
-      ...newHabit,
-      id: newHabit.id || `habit-${Date.now()}`,
-    };
-
-    setHabits([habitWithId, ...habits]);
-    if (!categories.includes(habitWithId.category)) {
-      setCategories([habitWithId.category, ...categories]);
-    }
+    addHabit(newHabit);
     setShowModal(false);
   };
 
@@ -83,11 +40,9 @@ function HabitList() {
       )}
       <div className="flex flex-col items-center gap-4 w-full">
         {filteredHabits.map((habit) => (
-          <HabitCard key={habit.id} {...habit} onDelete={handleDelete} />
+          <HabitCard key={habit.id} {...habit} onDelete={deleteHabit} />
         ))}
       </div>
     </div>
   );
 }
-
-export default HabitList;

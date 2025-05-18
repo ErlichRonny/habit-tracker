@@ -1,20 +1,26 @@
-import Dashboard from './components/Dashboard';
-import Navbar from './components/Navbar';
-import React, { useState } from 'react';
-import CalendarPage from './components/CalendarPage';
+import Dashboard from "./components/Dashboard";
+import Navbar from "./components/Navbar";
+import { useState } from "react";
+import CalendarPage from "./components/CalendarPage";
+import { HabitProvider } from "./context/HabitContext";
 
 function App() {
-  const [showCalendar, setShowCalendar] = useState(false); 
+  const [showCalendar, setShowCalendar] = useState(false);
   const handleContentToggle = () => {
     setShowCalendar(!showCalendar);
   };
   return (
-    <div>
-      <Navbar handleContentToggle={handleContentToggle} />
-      {showCalendar ? <CalendarPage /> : <Dashboard handleContentToggle={handleContentToggle} />}
-    </div>
+    <HabitProvider>
+      <div>
+        <Navbar handleContentToggle={handleContentToggle} />
+        {showCalendar ? (
+          <CalendarPage />
+        ) : (
+          <Dashboard handleContentToggle={handleContentToggle} />
+        )}
+      </div>
+    </HabitProvider>
   );
 }
 
 export default App;
-
