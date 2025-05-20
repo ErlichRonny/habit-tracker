@@ -1,3 +1,5 @@
+// Gets value from local storage
+// Parameter: key - the key to retrieve, defaultValue - the value to return if key is not found
 export function getStorageValue(key, defaultValue) {
   try {
     const stored = localStorage.getItem(key);
@@ -7,7 +9,8 @@ export function getStorageValue(key, defaultValue) {
     return defaultValue;
   }
 }
-
+// Sets value in local storage
+// Parameter: key - the key to set, value - the value to store
 export function setStorageValue(key, value) {
   try {
     localStorage.setItem(key, JSON.stringify(value));
@@ -18,7 +21,8 @@ export function setStorageValue(key, value) {
     return false;
   }
 }
-
+// Removes value from local storage
+// Parameter: key - the key to remove
 export function removeStorageValue(key) {
   try {
     localStorage.removeItem(key);

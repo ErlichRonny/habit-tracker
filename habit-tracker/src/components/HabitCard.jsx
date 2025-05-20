@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { useHabits } from "../context/HabitContext";
-import { getStorageValue, setStorageValue, removeStorageValue } from "../Storage";
+import {
+  getStorageValue,
+  setStorageValue,
+  removeStorageValue,
+} from "../Storage";
+// import js-confetti (uncomment and specify the correct path if needed)
+import JSConfetti from "js-confetti";
 
 export default function HabitCard({ name, category, streak, onDelete }) {
   const { recordHabitCompletion } = useHabits();
@@ -25,7 +31,7 @@ export default function HabitCard({ name, category, streak, onDelete }) {
 
   // Function to directly access streak data
   const getStreakData = () => {
-    return getStorageValue(name, [streak || 0, null])
+    return getStorageValue(name, [streak || 0, null]);
   };
 
   // Function to check if a date is yesterday
@@ -84,6 +90,28 @@ export default function HabitCard({ name, category, streak, onDelete }) {
     const newData = { ...streakData };
 
     if (newIsCompleted) {
+      // Add confetti effect when completing a habit
+      const jsConfetti = new JSConfetti();
+      jsConfetti.addConfetti({
+        confettiColors: [
+          "#ff0a54",
+          "#ff477e",
+          "#ff7096",
+          "#ff85a1",
+          "#fbb1bd",
+          "#f9bec7",
+        ],
+        confettiRadius: 4.5,
+        confettiNumber: 400,
+      });
+
+      // Emoji confetti
+      jsConfetti.addConfetti({
+        emojis: ["🌈", "🎉", "🥳", "✨", "💫", "🏆"],
+        emojiSize: 40,
+        confettiNumber: 30,
+      });
+
       // MARKING AS COMPLETE
 
       // Case 1: First completion or resuming after missing days
@@ -135,6 +163,7 @@ export default function HabitCard({ name, category, streak, onDelete }) {
       <div className="flex items-center gap-2 mb-2">
         <button
           className="px-2 py-1 rounded bg-blue-100 hover:bg-blue-200 transition"
+          id="check-button"
           onClick={handleToggle}
         >
           {streakData.isCompleted ? "✅" : "▢"}
