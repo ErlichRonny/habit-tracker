@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useHabits } from "../context/HabitContext";
+import { getStorageValue, setStorageValue, removeStorageValue } from "../Storage";
 
 export default function HabitCard({ name, category, streak, onDelete }) {
   const { recordHabitCompletion } = useHabits();
@@ -10,7 +11,6 @@ export default function HabitCard({ name, category, streak, onDelete }) {
     return today;
   };
 
-
   // Format date consistently for storage
   const formatDateKey = (date) => {
     if (!date) return "";
@@ -18,24 +18,14 @@ export default function HabitCard({ name, category, streak, onDelete }) {
     // Get local year, month, day (not UTC)
     const year = d.getFullYear();
     // Month is 0-indexed, so add 1 and pad with 0 if needed
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
-
   // Function to directly access streak data
   const getStreakData = () => {
-    const stored = localStorage.getItem(name);
-    if (stored) {
-      try {
-        return JSON.parse(stored);
-      } catch (e) {
-        console.error("Error parsing streak data:", e);
-        return [0, null];
-      }
-    }
-    return [streak || 0, null];
+    return getStorageValue(name, [streak || 0, null])
   };
 
   // Function to check if a date is yesterday
@@ -77,12 +67,9 @@ export default function HabitCard({ name, category, streak, onDelete }) {
   // Save streak data to localStorage
   useEffect(() => {
     if (streakData.count > 0 && streakData.lastCompleted) {
-      localStorage.setItem(
-        name,
-        JSON.stringify([streakData.count, streakData.lastCompleted])
-      );
+      setStorageValue(name, [streakData.count, streakData.lastCompleted]);
     } else {
-      localStorage.removeItem(name);
+      removeStorageValue(name);
     }
   }, [streakData, name]);
 
