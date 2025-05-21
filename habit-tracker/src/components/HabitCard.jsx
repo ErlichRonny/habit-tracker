@@ -8,7 +8,13 @@ import {
 // import js-confetti (uncomment and specify the correct path if needed)
 import JSConfetti from "js-confetti";
 
-export default function HabitCard({ name, category, streak, onDelete }) {
+export default function HabitCard({
+  name,
+  category,
+  streak,
+  onDelete,
+  showConfetti,
+}) {
   const { recordHabitCompletion } = useHabits();
   // Get a date object with time set to midnight
   const getTodayDate = () => {
@@ -90,28 +96,30 @@ export default function HabitCard({ name, category, streak, onDelete }) {
     const newData = { ...streakData };
 
     if (newIsCompleted) {
-      // Add confetti effect when completing a habit
-      const jsConfetti = new JSConfetti();
-      jsConfetti.addConfetti({
-        confettiColors: [
-          "#ff0a54",
-          "#ff477e",
-          "#ff7096",
-          "#ff85a1",
-          "#fbb1bd",
-          "#f9bec7",
-        ],
-        confettiRadius: 4.5,
-        confettiNumber: 400,
-      });
+      // Show confetti effect if enabled
+      if (showConfetti) {
+        // Add confetti effect when completing a habit
+        const jsConfetti = new JSConfetti();
+        jsConfetti.addConfetti({
+          confettiColors: [
+            "#ff0a54",
+            "#ff477e",
+            "#ff7096",
+            "#ff85a1",
+            "#fbb1bd",
+            "#f9bec7",
+          ],
+          confettiRadius: 4.5,
+          confettiNumber: 400,
+        });
 
-      // Emoji confetti
-      jsConfetti.addConfetti({
-        emojis: ["🌈", "🎉", "🥳", "✨", "💫", "🏆"],
-        emojiSize: 40,
-        confettiNumber: 30,
-      });
-
+        // Emoji confetti
+        jsConfetti.addConfetti({
+          emojis: ["🌈", "🎉", "🥳", "✨", "💫", "🏆"],
+          emojiSize: 40,
+          confettiNumber: 30,
+        });
+      }
       // MARKING AS COMPLETE
 
       // Case 1: First completion or resuming after missing days

@@ -12,6 +12,7 @@ export default function HabitList() {
   const filteredHabits = habits.filter(
     (habit) => filteredCategory === "" || habit.category === filteredCategory
   );
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const handleAddHabit = (newHabit) => {
     addHabit(newHabit);
@@ -26,13 +27,20 @@ export default function HabitList() {
         filteredCategory={filteredCategory}
         setFilteredCategory={setFilteredCategory}
       />
-      <button
-        className="px-2 py-1 rounded bg-green-100 hover:bg-green-200 transition mb-2"
-        onClick={() => setShowModal(true)}
-      >
-        {" "}
-        Add Habit{" "}
-      </button>
+      <div className="flex gap-4 mb-4 items-center">
+        <button
+          className="px-3 py-1 rounded text-sm bg-pink-100 hover:bg-pink-200 transition"
+          onClick={() => setShowConfetti(!showConfetti)}
+        >
+          Toggle Confetti {showConfetti ? "Off" : "On"}
+        </button>
+        <button
+          className="px-3 py-1 rounded bg-green-100 hover:bg-green-200 transition"
+          onClick={() => setShowModal(true)}
+        >
+          Add Habit
+        </button>
+      </div>
       {showAddModal && (
         <HabitModal onClose={() => setShowModal(false)}>
           <AddHabitForm onAddHabit={handleAddHabit} categories={categories} />
@@ -40,7 +48,7 @@ export default function HabitList() {
       )}
       <div className="flex flex-col items-center gap-4 w-full">
         {filteredHabits.map((habit) => (
-          <HabitCard key={habit.id} {...habit} onDelete={deleteHabit} />
+          <HabitCard key={habit.id} {...habit} onDelete={deleteHabit} showConfetti={showConfetti} />
         ))}
       </div>
     </div>
