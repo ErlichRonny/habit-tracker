@@ -4,6 +4,7 @@ import HabitModal from "./HabitModal";
 import AddHabitForm from "./AddHabitForm";
 import CategoryFilter from "./CategoryFilter";
 import { useHabits } from "../context/HabitContext";
+import DeleteForm from "./DeleteForm";
 
 export default function HabitList() {
   const { habits, categories, addHabit, deleteHabit } = useHabits();
@@ -12,11 +13,31 @@ export default function HabitList() {
   const filteredHabits = habits.filter(
     (habit) => filteredCategory === "" || habit.category === filteredCategory
   );
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [habitToDelete, setHabitToDelete] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
 
   const handleAddHabit = (newHabit) => {
     addHabit(newHabit);
     setShowModal(false);
+  };
+
+  const handleDeleteClick = (habitName) => {
+    setHabitToDelete(habitName);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (habitToDelete) {
+      deleteHabit(habitToDelete);
+      setShowDeleteModal(false);
+      setHabitToDelete(null);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+    setHabitToDelete(null);
   };
 
   return (
@@ -46,9 +67,23 @@ export default function HabitList() {
           <AddHabitForm onAddHabit={handleAddHabit} categories={categories} />
         </HabitModal>
       )}
+      {showDeleteModal && (
+        <HabitModal onClose={handleCancelDelete}>
+          <DeleteForm
+            onDeleteHabit={handleConfirmDelete}
+            habitName={habitToDelete}
+            onCancel={handleCancelDelete}
+          />
+        </HabitModal>
+      )}
       <div className="flex flex-col items-center gap-4 w-full">
         {filteredHabits.map((habit) => (
-          <HabitCard key={habit.id} {...habit} onDelete={deleteHabit} showConfetti={showConfetti} />
+          <HabitCard
+            key={habit.id}
+            {...habit}
+            onDelete={handleDeleteClick}
+            showConfetti={showConfetti}
+          />
         ))}
       </div>
     </div>
