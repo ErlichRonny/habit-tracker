@@ -17,7 +17,7 @@ function App() {
 
   return (
     <HabitProvider>
-      <div>
+      <div className="min-h-screen bg-white dark:bg-gray-900 dark:text-gray-100">
         <Navbar
           onDashboardClick={goToDashboard}
           onCalendarClick={goToCalendar}

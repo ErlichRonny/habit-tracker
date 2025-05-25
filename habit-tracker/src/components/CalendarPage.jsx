@@ -70,7 +70,7 @@ export default function CalendarPage() {
     if (view !== "month") return null;
 
     const tileDateKey = formatDateKey(date);
-    const completedHabits = habitsHistory[tileDateKey] || []; 
+    const completedHabits = habitsHistory[tileDateKey] || [];
 
     // If filtering by specific habit, only show indicator if that habit was completed
     if (filteredCategory !== "") {
@@ -103,8 +103,10 @@ export default function CalendarPage() {
   const habitsForSelectedDate = getHabitsForDate(dateKey);
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Habit Calendar</h1>
+    <div className="p-4 max-w-md mx-auto dark:bg-gray-900 dark:text-gray-100 min-h-screen">
+      <h1 className="text-2xl font-bold mb-4 dark:text-white">
+        Habit Calendar
+      </h1>
       <CategoryFilter
         categories={habitNames}
         filteredCategory={filteredCategory}
@@ -116,14 +118,14 @@ export default function CalendarPage() {
         tileContent={tileContent}
       />
 
-      <div className="mt-4 bg-white p-4 rounded shadow-md">
-        <h2 className="text-lg font-semibold">
+      <div className="mt-4 bg-white dark:bg-gray-800 p-4 rounded shadow-md">
+        <h2 className="text-lg font-semibold dark:text-white">
           {selectedDate.toLocaleDateString()}
         </h2>
 
         <div className="mt-2">
-          <h3 className="font-medium">Completed Habits:</h3>
-          <ul className="mt-1 pl-5 list-disc">
+          <h3 className="font-medium dark:text-white">Completed Habits:</h3>
+          <ul className="mt-1 pl-5 list-disc dark:text-white">
             {habitsForSelectedDate.length > 0 ? (
               habitsForSelectedDate
                 .filter(
@@ -132,7 +134,7 @@ export default function CalendarPage() {
                 )
                 .map((habitName) => <li key={habitName}>{habitName}</li>)
             ) : (
-              <p className="text-gray-500">
+              <p className="text-gray-500 dark:text-gray-400">
                 {filteredCategory
                   ? `"${filteredCategory}" not completed on this date`
                   : "No habits completed on this date"}

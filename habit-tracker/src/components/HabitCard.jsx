@@ -167,30 +167,30 @@ export default function HabitCard({
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 m-2 w-full max-w-md">
+    <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 m-2 w-full max-w-md">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <button
-            className="px-2 py-1 rounded bg-blue-100 hover:bg-blue-200 transition"
+            className="px-2 py-1 rounded bg-blue-100 hover:bg-blue-200 dark:bg-blue-800 dark:hover:bg-blue-700 transition"
             id="check-button"
             onClick={handleToggle}
           >
             {streakData.isCompleted ? "✅" : "▢"}
           </button>
-          <p className="font-medium"> {name} </p>
+          <p className="font-medium dark:text-white"> {name} </p>
         </div>
         <button
-          className="px-2 py-1 rounded bg-yellow-100 hover:bg-yellow-200 transition"
+          className="px-2 py-1 rounded bg-yellow-100 hover:bg-yellow-200 dark:bg-yellow-800 dark:hover:bg-yellow-600 transition"
           onClick={() => onEdit(name)}
           aria-label={`Edit ${name}`}
         >
           ✏️
         </button>
       </div>
-      <p>Category: {category}</p>
-      <p className="mb-2">Streak: {streakData.count}</p>
+      <p className="dark:text-gray-300">Category: {category}</p>
+      <p className="mb-2 dark:text-gray-300">Streak: {streakData.count}</p>
       <button
-        className="px-2 py-1 rounded bg-red-100 hover:bg-red-200 transition"
+        className="px-2 py-1 rounded bg-red-100 hover:bg-red-200 dark:bg-red-800 dark:hover:bg-red-700 transition"
         onClick={() => onDelete(name)}
       >
         🗑️

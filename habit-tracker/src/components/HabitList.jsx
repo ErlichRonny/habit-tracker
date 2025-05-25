@@ -19,6 +19,7 @@ export default function HabitList() {
   const [habitToEdit, setHabitToEdit] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   const handleAddHabit = (newHabit) => {
     addHabit(newHabit);
@@ -51,13 +52,30 @@ export default function HabitList() {
 
   const handleEditSubmit = (editedHabit) => {
     editHabit(habitToEdit.id, editedHabit);
-    setHabitToEdit(false);
-    setShowEditModal(null);
+    setHabitToEdit(null);
+    setShowEditModal(false);
   };
 
+  
+  const toggleDarkMode = () => {
+    const html = document.documentElement;
+    console.log("Before toggle:", html.classList.contains("dark"));
+
+    if (html.classList.contains("dark")) {
+      html.classList.remove("dark");
+      setDarkMode(false);
+    } else {
+      html.classList.add("dark");
+      setDarkMode(true);
+    }
+
+    console.log("After toggle:", html.classList.contains("dark"));
+    console.log("HTML classes:", html.className);
+  };
+  
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start p-6 bg-gray-50">
-      <h1 className="text-2xl font-bold mb-6">Habits</h1>
+    <div className="min-h-screen flex flex-col items-center justify-start p-6 bg-gray-50 dark:bg-gray-900">
+      <h1 className="text-2xl font-bold mb-6 dark:text-white">Habits</h1>
       <CategoryFilter
         categories={categories}
         filteredCategory={filteredCategory}
@@ -65,13 +83,19 @@ export default function HabitList() {
       />
       <div className="flex gap-4 mb-4 items-center">
         <button
-          className="px-3 py-1 rounded text-sm bg-pink-100 hover:bg-pink-200 transition"
+          className="px-3 py-1 rounded text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white transition"
+          onClick={toggleDarkMode}
+        >
+          Dark Mode {darkMode ? "☀️" : "🌙"}
+        </button>
+        <button
+          className="px-3 py-1 rounded text-sm bg-pink-100 hover:bg-pink-200 dark:bg-pink-800 dark:hover:bg-pink-700 dark:text-white transition"
           onClick={() => setShowConfetti(!showConfetti)}
         >
           Toggle Confetti {showConfetti ? "Off" : "On"}
         </button>
         <button
-          className="px-3 py-1 rounded bg-green-100 hover:bg-green-200 transition"
+          className="px-3 py-1 rounded bg-green-100 hover:bg-green-200 dark:bg-green-800 dark:hover:bg-green-700 dark:text-white transition"
           onClick={() => setShowModal(true)}
         >
           Add Habit
