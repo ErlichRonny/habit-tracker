@@ -5,7 +5,6 @@ import {
   setStorageValue,
   removeStorageValue,
 } from "../Storage";
-// import js-confetti (uncomment and specify the correct path if needed)
 import JSConfetti from "js-confetti";
 
 export default function HabitCard({
@@ -13,6 +12,7 @@ export default function HabitCard({
   category,
   streak,
   onDelete,
+  onEdit,
   showConfetti,
 }) {
   const { recordHabitCompletion } = useHabits();
@@ -168,15 +168,24 @@ export default function HabitCard({
 
   return (
     <div className="bg-white shadow-md rounded-lg p-4 m-2 w-full max-w-md">
-      <div className="flex items-center gap-2 mb-2">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <button
+            className="px-2 py-1 rounded bg-blue-100 hover:bg-blue-200 transition"
+            id="check-button"
+            onClick={handleToggle}
+          >
+            {streakData.isCompleted ? "✅" : "▢"}
+          </button>
+          <p className="font-medium"> {name} </p>
+        </div>
         <button
-          className="px-2 py-1 rounded bg-blue-100 hover:bg-blue-200 transition"
-          id="check-button"
-          onClick={handleToggle}
+          className="px-2 py-1 rounded bg-yellow-100 hover:bg-yellow-200 transition"
+          onClick={() => onEdit(name)}
+          aria-label={`Edit ${name}`}
         >
-          {streakData.isCompleted ? "✅" : "▢"}
+          ✏️
         </button>
-        <p className="font-medium"> {name} </p>
       </div>
       <p>Category: {category}</p>
       <p className="mb-2">Streak: {streakData.count}</p>

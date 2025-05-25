@@ -70,6 +70,29 @@ export function HabitProvider({ children }) {
     removeStorageValue(habitName);
   };
 
+  const editHabit = (habitId, updatedHabitData) => {
+    setHabits((prevHabits) => {
+      const updatedHabits = prevHabits.map((habit) => {
+        if (habit.id === habitId) {
+          return {
+            ...habit,
+            ...updatedHabitData,
+            id: habit.id, // Keep the original ID
+          };
+        }
+        return habit;
+      });
+
+      // Update categories list to include any new categories
+      const allCategories = [
+        ...new Set(updatedHabits.map((habit) => habit.category)),
+      ];
+      setCategories(allCategories);
+
+      return updatedHabits;
+    });
+  };
+
   // Record habit completion in history
   const recordHabitCompletion = (
     habitName,
@@ -95,12 +118,6 @@ export function HabitProvider({ children }) {
 
     // Format the date parameter
     const formattedDateKey = formatDateKey(date);
-
-    console.log(
-      `Recording ${habitName} as ${
-        isCompleted ? "completed" : "incomplete"
-      } for date: ${formattedDateKey}`
-    );
 
     setHabitsHistory((prev) => {
       const newHistory = { ...prev };
@@ -145,6 +162,7 @@ export function HabitProvider({ children }) {
     setHabitsHistory,
     addHabit,
     deleteHabit,
+    editHabit,
     recordHabitCompletion,
   };
 

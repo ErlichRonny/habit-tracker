@@ -5,9 +5,10 @@ import AddHabitForm from "./AddHabitForm";
 import CategoryFilter from "./CategoryFilter";
 import { useHabits } from "../context/HabitContext";
 import DeleteForm from "./DeleteForm";
+import EditForm from "./EditForm";
 
 export default function HabitList() {
-  const { habits, categories, addHabit, deleteHabit } = useHabits();
+  const { habits, categories, addHabit, deleteHabit, editHabit } = useHabits();
   const [showAddModal, setShowModal] = useState(false);
   const [filteredCategory, setFilteredCategory] = useState("");
   const filteredHabits = habits.filter(
@@ -15,6 +16,8 @@ export default function HabitList() {
   );
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [habitToDelete, setHabitToDelete] = useState(null);
+  const [habitToEdit, setHabitToEdit] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
   const handleAddHabit = (newHabit) => {
@@ -38,6 +41,18 @@ export default function HabitList() {
   const handleCancelDelete = () => {
     setShowDeleteModal(false);
     setHabitToDelete(null);
+  };
+
+  const handleEditClick = (habitName) => {
+    const habitObj = habits.find((habit) => habit.name === habitName);
+    setHabitToEdit(habitObj);
+    setShowEditModal(true);
+  };
+
+  const handleEditSubmit = (editedHabit) => {
+    editHabit(habitToEdit.id, editedHabit);
+    setHabitToEdit(false);
+    setShowEditModal(null);
   };
 
   return (
@@ -76,12 +91,18 @@ export default function HabitList() {
           />
         </HabitModal>
       )}
+      {showEditModal && (
+        <HabitModal onClose={() => setShowEditModal(false)}>
+          <EditForm onEditHabit={handleEditSubmit} habitToEdit={habitToEdit} />
+        </HabitModal>
+      )}
       <div className="flex flex-col items-center gap-4 w-full">
         {filteredHabits.map((habit) => (
           <HabitCard
             key={habit.id}
             {...habit}
             onDelete={handleDeleteClick}
+            onEdit={handleEditClick}
             showConfetti={showConfetti}
           />
         ))}

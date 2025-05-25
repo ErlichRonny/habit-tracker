@@ -10,7 +10,7 @@ export default function DeleteForm({ onDeleteHabit, habitName, onCancel }) {
         <h1 className="text-xl font-bold mb-6">Delete Habit</h1>
 
         <div className="mb-4 w-full max-w-sm">
-          <p className="block mb-4 font-medium">
+          <p className="block mb-4 font-medium text-center">
             Permanently delete '{habitName}'?
           </p>
 
