@@ -5,19 +5,19 @@ export default function CategoryFilter({
 }) {
   const handleClick = (cat) => {
     if (filteredCategory === cat) {
-      // If clicking the same habit that's already selected, clear the filter
       setFilteredCategory("");
     } else {
-      // If clicking a different habit, switch to it
       setFilteredCategory(cat);
     }
   };
 
   return (
-    <div className="flex gap-2 mb-4">
+    <div className="flex flex-wrap justify-center gap-2 mb-6">
       <button
-        className={`px-3 py-1 rounded-full text-sm ${
-          filteredCategory === "" ? "bg-blue-200" : "bg-gray-100"
+        className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors duration-200 ${
+          filteredCategory === ""
+            ? "bg-indigo-400 text-white border-indigo-600 shadow-sm"
+            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400"
         }`}
         onClick={() => setFilteredCategory("")}
       >
@@ -26,8 +26,10 @@ export default function CategoryFilter({
       {categories.map((cat) => (
         <button
           key={cat}
-          className={`px-3 py-1 rounded-full text-sm ${
-            filteredCategory === cat ? "bg-blue-200" : "bg-gray-100"
+          className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors duration-200 ${
+            filteredCategory === cat
+              ? "bg-indigo-200 text-indigo-700  border-gray-300 shadow-sm"
+              : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
           }`}
           onClick={() => handleClick(cat)}
         >

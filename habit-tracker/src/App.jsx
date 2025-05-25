@@ -6,18 +6,24 @@ import { HabitProvider } from "./context/HabitContext";
 
 function App() {
   const [showCalendar, setShowCalendar] = useState(false);
-  const handleContentToggle = () => {
-    setShowCalendar(!showCalendar);
+
+  const goToDashboard = () => {
+    setShowCalendar(false);
   };
+
+  const goToCalendar = () => {
+    setShowCalendar(true);
+  };
+
   return (
     <HabitProvider>
       <div>
-        <Navbar handleContentToggle={handleContentToggle} />
-        {showCalendar ? (
-          <CalendarPage />
-        ) : (
-          <Dashboard handleContentToggle={handleContentToggle} />
-        )}
+        <Navbar
+          onDashboardClick={goToDashboard}
+          onCalendarClick={goToCalendar}
+          currentView={showCalendar ? "calendar" : "dashboard"}
+        />
+        {showCalendar ? <CalendarPage /> : <Dashboard />}
       </div>
     </HabitProvider>
   );
