@@ -11,7 +11,7 @@ export default function DeleteForm({ onDeleteHabit, habitName, onCancel }) {
 
         <div className="mb-4 w-full max-w-sm">
           <p className="block mb-4 font-medium">
-            Permanently delete '{habitName}' habit?
+            Permanently delete '{habitName}'?
           </p>
 
           <div className="flex gap-4 justify-center">

@@ -2,11 +2,15 @@ import { useState, useEffect, useCallback } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { useHabits } from "../context/HabitContext";
+import CategoryFilter from "./CategoryFilter";
 
 export default function CalendarPage() {
   const { habits, habitsHistory } = useHabits();
-
+  const [filteredCategory, setFilteredCategory] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  // Extract habit names for filter
+  const habitNames = habits.map((habit) => habit.name);
 
   // Format date to local YYYY-MM-DD (not UTC/ISO)
   const formatDateKey = useCallback((date) => {
@@ -66,7 +70,19 @@ export default function CalendarPage() {
     if (view !== "month") return null;
 
     const tileDateKey = formatDateKey(date);
-    const completedHabits = habitsHistory[tileDateKey];
+    const completedHabits = habitsHistory[tileDateKey] || []; 
+
+    // If filtering by specific habit, only show indicator if that habit was completed
+    if (filteredCategory !== "") {
+      const hasFilteredHabit = completedHabits.includes(filteredCategory);
+      if (!hasFilteredHabit) return null;
+
+      return (
+        <div className="flex justify-center mt-1">
+          <div className="h-2 w-2 rounded-full bg-blue-500" />
+        </div>
+      );
+    }
 
     if (!completedHabits || completedHabits.length === 0) return null;
 
@@ -89,6 +105,11 @@ export default function CalendarPage() {
   return (
     <div className="p-4 max-w-md mx-auto">
       <h1 className="text-2xl font-bold mb-4">Habit Calendar</h1>
+      <CategoryFilter
+        categories={habitNames}
+        filteredCategory={filteredCategory}
+        setFilteredCategory={setFilteredCategory}
+      />
       <Calendar
         onChange={handleDateChange}
         value={selectedDate}
@@ -104,11 +125,18 @@ export default function CalendarPage() {
           <h3 className="font-medium">Completed Habits:</h3>
           <ul className="mt-1 pl-5 list-disc">
             {habitsForSelectedDate.length > 0 ? (
-              habitsForSelectedDate.map((habitName) => (
-                <li key={habitName}>{habitName}</li>
-              ))
+              habitsForSelectedDate
+                .filter(
+                  (habitName) =>
+                    filteredCategory === "" || habitName === filteredCategory
+                )
+                .map((habitName) => <li key={habitName}>{habitName}</li>)
             ) : (
-              <p className="text-gray-500">No habits completed on this date</p>
+              <p className="text-gray-500">
+                {filteredCategory
+                  ? `"${filteredCategory}" not completed on this date`
+                  : "No habits completed on this date"}
+              </p>
             )}
           </ul>
         </div>

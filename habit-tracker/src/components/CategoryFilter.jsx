@@ -1,18 +1,15 @@
-import { useState } from "react";
-
 export default function CategoryFilter({
   categories,
   filteredCategory,
   setFilteredCategory,
 }) {
-  const [clicked, setClicked] = useState(false);
   const handleClick = (cat) => {
-    if (!clicked) {
-      setFilteredCategory(cat);
-      setClicked(true);
-    } else {
+    if (filteredCategory === cat) {
+      // If clicking the same habit that's already selected, clear the filter
       setFilteredCategory("");
-      setClicked(false);
+    } else {
+      // If clicking a different habit, switch to it
+      setFilteredCategory(cat);
     }
   };
 
