@@ -11,15 +11,23 @@ export default function HabitList() {
   const { habits, categories, addHabit, deleteHabit, editHabit } = useHabits();
   const [showAddModal, setShowModal] = useState(false);
   const [filteredCategory, setFilteredCategory] = useState("");
-  const filteredHabits = habits.filter(
-    (habit) => filteredCategory === "" || habit.category === filteredCategory
-  );
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [habitToDelete, setHabitToDelete] = useState(null);
   const [habitToEdit, setHabitToEdit] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredHabits = habits.filter((habit) => {
+    const matchesCategory =
+      filteredCategory === "" || habit.category === filteredCategory;
+    const matchesSearch =
+      searchTerm === "" ||
+      habit.name.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   const handleAddHabit = (newHabit) => {
     addHabit(newHabit);
@@ -56,7 +64,6 @@ export default function HabitList() {
     setShowEditModal(false);
   };
 
-  
   const toggleDarkMode = () => {
     const html = document.documentElement;
     console.log("Before toggle:", html.classList.contains("dark"));
@@ -72,7 +79,7 @@ export default function HabitList() {
     console.log("After toggle:", html.classList.contains("dark"));
     console.log("HTML classes:", html.className);
   };
-  
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-start p-6 bg-gray-50 dark:bg-gray-900">
       <h1 className="text-2xl font-bold mb-6 dark:text-white">Habits</h1>
@@ -101,6 +108,13 @@ export default function HabitList() {
           Add Habit
         </button>
       </div>
+      <input
+        type="text"
+        placeholder="Search habits..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="px-3 py-2 border border-gray-300 rounded-md mb-4 w-64 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+      />
       {showAddModal && (
         <HabitModal onClose={() => setShowModal(false)}>
           <AddHabitForm onAddHabit={handleAddHabit} categories={categories} />
