@@ -36,7 +36,7 @@ export default function EditForm({ onEditHabit, habitToEdit }) {
             className="w-full border border-gray-400 rounded px-2 py-1 hover:bg-gray-100 placeholder:text-gray-500 placeholder:opacity-100"
             name="habitName"
             onChange={(e) => setHabitName(e.target.value)}
-            placeholder={habitToEdit?.name || "Enter habit name"}
+            value={habitToEdit?.name || "Enter habit name"}
           />
         </div>
         <div className="mb-4 w-full max-w-sm">
@@ -45,7 +45,7 @@ export default function EditForm({ onEditHabit, habitToEdit }) {
             className="w-full border border-gray-400 rounded px-2 py-1 hover:bg-gray-100 placeholder:text-gray-500 placeholder:opacity-100"
             name="habitCategory"
             onChange={(e) => setCategory(e.target.value)}
-            placeholder={habitToEdit?.category || "Enter category"}
+            value={habitToEdit?.category || "Enter category"}
           />
         </div>
         <div className="mb-1 w-full max-w-sm">
